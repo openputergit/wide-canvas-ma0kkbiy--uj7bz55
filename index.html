@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immersive 3D Experience</title>
+    <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <main class="relative min-h-screen">
+        <div class="container mx-auto px-4 py-16 relative z-10">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                    Explore the Digital Universe
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 mb-8">
+                    Step into an interactive 3D world where imagination meets technology
+                </p>
+                <button class="px-8 py-4 bg-blue-500 hover:bg-blue-600 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105">
+                    Begin Journey
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="glass-effect rounded-2xl p-8">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/widecanvas-d0dd4.appspot.com/o/additional-images%2Foriginal-0258c625e36006bf41858ba5efdd1883.webp?alt=media&token=277318bd-c846-44b6-b9ea-26312c973860" 
+                         alt="3D Visualization" 
+                         class="w-full h-64 object-cover rounded-xl mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Interactive Experiences</h2>
+                    <p class="text-gray-300">Immerse yourself in beautifully crafted 3D environments that respond to your presence.</p>
+                </div>
+                <div class="glass-effect rounded-2xl p-8">
+                    <div class="w-full h-64 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl mb-6"></div>
+                    <h2 class="text-2xl font-bold mb-4">Digital Innovation</h2>
+                    <p class="text-gray-300">Push the boundaries of what's possible with cutting-edge WebGL technology.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Three.js Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create animated background
+        const geometry = new THREE.IcosahedronGeometry(2, 1);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x2194ce,
+            wireframe: true,
+            wireframeLinewidth: 2
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // Add lights
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 1, 1);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x404040));
+
+        camera.position.z = 5;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            mesh.rotation.x += 0.001;
+            mesh.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive canvas
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Interactive mesh movement
+        document.addEventListener('mousemove', (event) => {
+            const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            mesh.rotation.x = mouseY * 0.3;
+            mesh.rotation.y = mouseX * 0.3;
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
